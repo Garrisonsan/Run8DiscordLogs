@@ -117,6 +117,10 @@ def LogFilter(line):
     #Corrupt Train Detected
     elif ("Corrupt train detected" in line or "In the vicinity of Tile" in line):
         return ":face_with_symbols_over_mouth: :steam_locomotive: " + line
+        
+    #Split Track Condition
+    elif ("Possible Split" and "Track Condition" in line):
+        return ":twisted_rightwards_arrows: :steam_locomotive: " + line
     
     # Say
     elif ("0: " in line and "Track B10" not in line and "Track B20" not in line and "Track B30" not in line and "Track B40" not in line and "Track B50" not in line and "Track B60" not in line and "New EOT" not in line):
