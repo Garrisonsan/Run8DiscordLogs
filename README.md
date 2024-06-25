@@ -11,11 +11,11 @@ To disable a particular log entry, add a # to the beginning of the line containi
 # Launch from batch file
 Copy the lines below into a blank notepad window and replace the relevant details with your information, then save to a .bat file (e.g.
 Launch_LogBot_WEST.bat) for easy launching of either script. Do this for each instance of the log bot you wish to run. 
-
+```
 TITLE Log Bot XXXX
-python "X:\PATH\TO\Run8LoggerXXXX.py" -f "X:\PATH\TO\Run8.log" -t YOUR_DISCORD_BOT_KEY -c YOUR_CHANNEL_IDENTIFIER  
+python "X:\PATH\TO\Run8LoggerXXXX.py" -f "X:\PATH\TO\Run8.log" -t YOUR_DISCORD_BOT_KEY -c YOUR_CHANNEL_IDENTIFIER
 pause
-
+```
 # Troubleshooting
 The library used to follow the log files does attempt to detect when Run-8 rotates its logs and starts a new file, but sometimes it misses.
 If the logger stops sending messages to Discord even after restarting the script, go into the directory where the python file lives and
