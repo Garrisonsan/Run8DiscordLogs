@@ -122,6 +122,14 @@ def LogFilter(line):
     elif ("Possible Split" and "Track Condition" in line):
         return ":twisted_rightwards_arrows: :steam_locomotive: " + line
     
+    #Client Takes Ownership of Train
+    elif ("Client Requested Train" in line):
+        return ":pilot: :steam_locomotive: " + line
+    
+    #Client Relinquishes Train
+    elif ("Client Train Relinquished" in line):
+        return ":person_walking: :steam_locomotive: " + line
+        
     # Say
     elif ("0: " in line and "Track B10" not in line and "Track B20" not in line and "Track B30" not in line and "Track B40" not in line and "Track B50" not in line and "Track B60" not in line and "New EOT" not in line):
         return "\N{SPEECH BALLOON} " + line
