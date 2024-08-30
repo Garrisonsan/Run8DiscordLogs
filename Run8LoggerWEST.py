@@ -111,7 +111,7 @@ def LogFilter(line):
     # No match found
     else:
         # return line
-        return
+        return ''
 
 
 def file_tail(channel, filename):
