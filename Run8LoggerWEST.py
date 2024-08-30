@@ -147,10 +147,12 @@ if __name__ == '__main__':
     async def scan_log():
         file = args.file
         channel = client.get_channel(args.channel)
-        return_line = file_tail(channel, file)
-        if len(return_line) > 0:
+        rstr = file_tail(channel, file)
+        if len(rstr) > 0:
             try:
-                await channel.send(return_line)
+                for line in rstr.splitlines():
+                    print(f'sending: {line.strip()}')
+                    await channel.send(line.strip())
             except discord.HTTPException as e:
                 print(f'Error sending message to discord channel {channel} : {e}')
 
