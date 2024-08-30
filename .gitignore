@@ -1,0 +1,7 @@
+.idea/
+pygtest.py
+test.py
+
+*.log
+*.log.*
+*.offset
