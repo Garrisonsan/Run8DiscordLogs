@@ -16,6 +16,20 @@ TITLE Log Bot XXXX
 python "X:\PATH\TO\Run8LoggerXXXX.py" -f "X:\PATH\TO\Run8.log" -t YOUR_DISCORD_BOT_KEY -c YOUR_CHANNEL_IDENTIFIER
 pause
 ```
+# Switches:
+--file / -f `<location and file name of Run8 log file>`
+
+--token / -t `<the unique bot token>` 
+
+--wait / -W `<the number of seconds between scanning of log file>`
+
+--channel / -c `<the discord channel ID to write log messages to>`
+
+--spawn / -s `<the discord channel ID to write player spawn AI messages to (optional)>`
+
+--hb_timer / -b `<How often (in minutes) to send logbot status message (default: 30) - enter 0 to disable>`
+
+
 # Troubleshooting
 The library used to follow the log files does attempt to detect when Run-8 rotates its logs and starts a new file, but sometimes it misses.
 If the logger stops sending messages to Discord even after restarting the script, go into the directory where the python file lives and

@@ -9,6 +9,7 @@ Basis for Discord communication from https://github.com/Rapptz/discord.py/blob/v
 import argparse
 import datetime
 import discord
+import os
 import sys
 from pygtail import Pygtail
 from discord.ext import commands, tasks
@@ -61,7 +62,10 @@ def LogFilter(line):
 
     # Bad Password
     elif ("This guy tried to join with a Bad Password" in line):
-        return ":lock: " + line
+        frags = line.split('Password: ')
+        cr = '\n'   # Carriage return for strip call below
+        ret_line = f'{frags[0]}Password: {frags[1]}Password: `{frags[2].strip(cr)}`'
+        return f':lock: ' + ret_line
 
     # Loco Failure
     elif ("LocoFailure Message Sent" in line):
@@ -125,10 +129,15 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Tail a file and output as a Discord bot to a Discord channel.")
     parser.add_argument('--token', '-t', help="The bot token that will connect to Discord.")
-    parser.add_argument('--channel', '-c', type=int,help="Discord channel to output to.")
+    parser.add_argument('--channel', '-c', type=int, help="Discord channel to output to.")
     parser.add_argument('--file', '-f', help="The file to tail.", required=True)
     parser.add_argument('--wait', '-W', metavar='SEC', type=int,
                         help="Try to read new lines every SEC seconds. (default: 10)", default=10)
+    parser.add_argument('--hb_timer', '-b', type=int,
+                        help="Time (minutes) between sending heartbeat messages (0 for no message, default = 30).",
+                        default=30)
+    parser.add_argument('--spawn', '-s', type=int,
+                        help="Discord channel to send train spawn messages to. Default: send to main channel")
     args = parser.parse_args()
     #
     # Define discord bot command structure and register
@@ -146,23 +155,46 @@ if __name__ == '__main__':
         tdstr = datetime.datetime.now().strftime("%H:%M:%S %m-%d-%Y")
         print(f'Discord bot [{client.user}] is starting {tdstr}')
         channel = client.get_channel(args.channel)
-        await channel.send(f'Log bot starting {tdstr}')
+        await channel.send(f'LOGBOT starting {tdstr}')
         scan_log.start()
+        if args.hb_timer != 0:
+            report_size.start()
 
     @tasks.loop(seconds=args.wait)
     async def scan_log():
         file = args.file
         channel = client.get_channel(args.channel)
+        if args.spawn:
+            print(f'in spawn channel: {args.spawn}')
+            spawn_channel = client.get_channel(args.spawn)
+        else:
+            spawn_channel = client.get_channel(args.channel)
         rstr = file_tail(channel, file)
         if len(rstr) > 0:
             try:
                 for line in rstr.splitlines():
-                    # print(f'sending: {line.strip()}')
+                    if 'random AI' in line and args.spawn:
+                        await spawn_channel.send(line.strip())
                     await channel.send(line.strip())
             except discord.HTTPException as e:
                 print(f'Error sending message to discord channel {channel} : {e}')
+
+    @tasks.loop(minutes=args.hb_timer)
+    async def report_size():
+        file = args.file
+        channel = client.get_channel(args.channel)
+        fstat = os.stat(file)
+        tdstr = datetime.datetime.now().strftime("%H:%M:%S %m-%d-%Y")
+        #sz_str = f'```ansi\n\u001b[1;32m[{tdstr}] **Logbot heartbeat** Log file size = {fstat.st_size / 1024:.1f} KB```'
+        sz_str = f'`[{tdstr}] LOGBOT heartbeat : Log file size = {fstat.st_size / 1024:.1f} KB`'
+
+        try:
+            await channel.send(sz_str)
+        except discord.HTTPException as e:
+            print(f'Error sending message to discord channel {channel} : {e}')
 
     try:
         client.run(args.token)
     except discord.LoginFailure:
         sys.exit("FATAL ERROR: Couldn't login with token \"{}\".".format(args.token))
+
