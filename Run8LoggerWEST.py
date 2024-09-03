@@ -157,7 +157,7 @@ if __name__ == '__main__':
         if len(rstr) > 0:
             try:
                 for line in rstr.splitlines():
-                    print(f'sending: {line.strip()}')
+                    # print(f'sending: {line.strip()}')
                     await channel.send(line.strip())
             except discord.HTTPException as e:
                 print(f'Error sending message to discord channel {channel} : {e}')
