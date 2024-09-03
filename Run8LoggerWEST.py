@@ -128,12 +128,17 @@ if __name__ == '__main__':
     parser.add_argument('--channel', '-c', type=int,help="Discord channel to output to.")
     parser.add_argument('--file', '-f', help="The file to tail.", required=True)
     parser.add_argument('--wait', '-W', metavar='SEC', type=int,
-                        help="Try to read new lines every SEC seconds. (default: 10)",default=10)
+                        help="Try to read new lines every SEC seconds. (default: 10)", default=10)
     args = parser.parse_args()
     #
     # Define discord bot command structure and register
     #
-    client = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+
+    # Instantiate client
+    # client = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+    # Above call only needed if the bot needs to respond to commands (which opens up permission issues)
+    # Below call is for a bot that only sends messages to channels
+    client = discord.Client(intents=discord.Intents.default())
 
 
     @client.event
