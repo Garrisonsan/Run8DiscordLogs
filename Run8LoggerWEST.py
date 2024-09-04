@@ -165,7 +165,6 @@ if __name__ == '__main__':
         file = args.file
         channel = client.get_channel(args.channel)
         if args.spawn:
-            print(f'in spawn channel: {args.spawn}')
             spawn_channel = client.get_channel(args.spawn)
         else:
             spawn_channel = client.get_channel(args.channel)
