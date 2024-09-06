@@ -48,11 +48,11 @@ def LogFilter(line):
     elif ("an MOW Flag or Object" in line):
         return ":stop_sign: " + line
 
-    # Current Player List
+    # Current Player List (logged by Run-8 every 10 minutes - uncomment if you want this posted to Discord)
     # elif ("Current Player List" in line):
     #    return ":white_check_mark: " + line
 
-    # Current Player List 2
+    # Current Player List 2 (same as above)
     # elif ("ClientID:" in line and not "PendingRespawnRequest" in line):
     #    return ":white_check_mark: " + line
 
@@ -108,13 +108,12 @@ def LogFilter(line):
         return ":person_walking: :steam_locomotive: " + line
 
     # Say
-    elif (
-            "0: " in line and "Track 210" not in line and "Track 10" not in line and "Track 20" not in line and "New EOT" not in line):
+    elif ("INFO  - 0:" in line):
         return "\N{SPEECH BALLOON} " + line
 
     # No match found
     else:
-        # return line
+        # return empty line
         return ''
 
 
